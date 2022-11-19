@@ -12,21 +12,22 @@ import java.util.UUID;
 
 @RequiredArgsConstructor
 @RestController
+@RequestMapping("/catalog")
 public class CategoryController {
 
     private final CategoryService catalogService;
 
-    @PostMapping("/catalog/category")
+    @PostMapping("/category")
     public CategoryDto createCategory(@RequestBody @Validated CategoryCreateDto dto) {
         return catalogService.createCategory(dto);
     }
 
-    @GetMapping("/catalog/categories")
+    @GetMapping("/categories")
     public List<CategoryDto> getAllCategories() {
         return catalogService.getAllCategories();
     }
 
-    @GetMapping("/catalog/category/{id}")
+    @GetMapping("/category/{id}")
     public CategoryDto getCategoryById(@PathVariable UUID id) {
         return catalogService.getCategoryDtoById(id);
     }

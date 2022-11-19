@@ -1,8 +1,6 @@
 package com.onlineshop.catalog.service;
 
-import com.onlineshop.catalog.dto.CategoryDto;
-import com.onlineshop.catalog.dto.ItemCreateDto;
-import com.onlineshop.catalog.dto.ItemDto;
+import com.onlineshop.catalog.dto.*;
 import com.onlineshop.catalog.entity.CategoryEntity;
 import com.onlineshop.catalog.entity.ItemEntity;
 import com.onlineshop.catalog.repository.ItemRepository;

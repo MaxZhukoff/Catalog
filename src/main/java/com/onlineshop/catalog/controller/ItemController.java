@@ -1,7 +1,9 @@
 package com.onlineshop.catalog.controller;
 
+import com.onlineshop.catalog.dto.ItemAmountChangeDto;
 import com.onlineshop.catalog.dto.ItemCreateDto;
 import com.onlineshop.catalog.dto.ItemDto;
+import com.onlineshop.catalog.dto.ItemPriceChangeDto;
 import com.onlineshop.catalog.service.ItemService;
 import lombok.AllArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -12,38 +14,39 @@ import java.util.UUID;
 
 @AllArgsConstructor
 @RestController
+@RequestMapping("/catalog/items")
 public class ItemController {
 
     private final ItemService itemService;
 
-    @GetMapping("/catalog/items")
+    @GetMapping
     public List<ItemDto> getAllItems() {
         return itemService.getAllItems();
     }
 
-    @PostMapping("catalog/item")
+    @PostMapping
     public ItemDto createItem(@RequestBody @Validated ItemCreateDto item) {
         return itemService.createItem(item);
     }
 
-    @GetMapping("/catalog/item/{id}")
+    @GetMapping("/{id}")
     public ItemDto getItemById(@PathVariable UUID id) {
         return itemService.getItemByID(id);
     }
 
-    @DeleteMapping("/catalog/item/{id}")
+    @DeleteMapping("/{id}")
     public void deleteItemById(@PathVariable UUID id) {
         itemService.deleteItemById(id);
     }
 
-    @PutMapping("/catalog/item/{id}/price")
+    @PutMapping("/{id}/price")
     public ItemDto changePriceOfItemById(@RequestBody @Validated ItemPriceChangeDto dto,
                                          @PathVariable("id") UUID id) {
 
         return itemService.changePriceOfItemById(id, dto);
     }
 
-    @PutMapping("/catalog/item/{id}/amount")
+    @PutMapping("/{id}/amount")
     public ItemDto changeAmountOfItemById(@RequestBody @Validated ItemAmountChangeDto dto,
                                           @PathVariable("id") UUID id) {
 
