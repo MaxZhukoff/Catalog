@@ -7,6 +7,9 @@ import com.onlineshop.catalog.dto.ItemDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+import java.util.UUID;
+
 @Component
 @RequiredArgsConstructor
 public class ItemMapper {
@@ -40,4 +43,6 @@ public class ItemMapper {
                 itemEntity.getAmount(),
                 itemEntity.getCategory());
     }
+
+
 }

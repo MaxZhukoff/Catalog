@@ -6,14 +6,14 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.UUID;
 
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
 @Table(name = "item")
 @Builder
 @Entity
 public class ItemEntity {
+
     @Id
     @GeneratedValue()
     @Column(columnDefinition = "uuid")
