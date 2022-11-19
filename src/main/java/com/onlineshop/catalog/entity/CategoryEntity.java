@@ -1,5 +1,6 @@
 package com.onlineshop.catalog.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -22,5 +23,6 @@ public class CategoryEntity {
     private String typeName;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "category")
+    @JsonManagedReference
     private List<ItemEntity> items;
 }

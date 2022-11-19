@@ -1,5 +1,6 @@
 package com.onlineshop.catalog.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -28,5 +29,6 @@ public class ItemEntity {
 
     @ManyToOne
     @JoinColumn(name = "category_id")
+    @JsonBackReference
     private CategoryEntity category;
 }

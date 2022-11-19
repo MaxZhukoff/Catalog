@@ -1,9 +1,6 @@
 package com.onlineshop.catalog.service;
 
-import com.onlineshop.catalog.dto.CategoryCreateDto;
-import com.onlineshop.catalog.dto.CategoryDto;
-import com.onlineshop.catalog.dto.ItemCreateDto;
-import com.onlineshop.catalog.dto.ItemDto;
+import com.onlineshop.catalog.dto.*;
 import com.onlineshop.catalog.entity.CategoryEntity;
 import com.onlineshop.catalog.entity.ItemEntity;
 import com.onlineshop.catalog.repository.CategoryRepository;
@@ -12,6 +9,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
@@ -41,7 +39,6 @@ public class CatalogService {
     public ItemDto createItem(ItemCreateDto itemCreateDto) {
         ItemEntity itemEntity;
         try {
-            //пофиксить маппер, поиск категории в маппере
             CategoryDto categoryDto = getCategoryById(UUID.fromString(itemCreateDto.categoryId()));
             itemEntity = itemMapper.itemCreateDtoToEntity(itemCreateDto, categoryMapper.dtoToEntity(categoryDto));
             final ItemEntity createdItem = itemRepository.saveAndFlush(itemEntity);
@@ -74,13 +71,9 @@ public class CatalogService {
     }
 
     public ItemDto getItemByID(UUID id) {
-        Optional<ItemEntity> optionalItemEntity = itemRepository.findById(id);
+        ItemEntity itemEntity = getItemEntity(id);
 
-        if (optionalItemEntity.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-        } else {
-            return itemMapper.entityToItemDto(optionalItemEntity.get());
-        }
+        return itemMapper.entityToItemDto(itemEntity);
     }
 
     public CategoryDto getCategoryById(UUID id) {
@@ -100,17 +93,34 @@ public class CatalogService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "A item with this id:" + id + " was not found");
         }
     }
+    @Transactional
+    public ItemDto changePriceOfItemById(UUID id, ItemPriceChangeDto dto) {
+        ItemEntity itemEntity = getItemEntity(id);
 
-    public ItemDto updateItemById(UUID id) {
+        itemEntity.setPrice(dto.price());
+        itemRepository.save(itemEntity);
+
+        return itemMapper.entityToItemDto(itemEntity);
+    }
+
+    @Transactional
+    public ItemDto changeAmountOfItemById(UUID id, ItemAmountChangeDto dto) {
+        ItemEntity itemEntity = getItemEntity(id);
+
+        itemEntity.setAmount(dto.amount());
+        itemRepository.save(itemEntity);
+
+        return itemMapper.entityToItemDto(itemEntity);
+    }
+
+    private ItemEntity getItemEntity(UUID id) {
         Optional<ItemEntity> optionalItemEntity = itemRepository.findById(id);
 
         if (optionalItemEntity.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "A item with this id:" + id + " was not found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        } else {
+            return optionalItemEntity.get();
         }
-        ItemEntity catalogEntity = optionalItemEntity.get();
-        itemRepository.save(catalogEntity);
-
-        return itemMapper.entityToItemDto(catalogEntity);
     }
 
 }

@@ -1,9 +1,6 @@
 package com.onlineshop.catalog.controller;
 
-import com.onlineshop.catalog.dto.CategoryCreateDto;
-import com.onlineshop.catalog.dto.CategoryDto;
-import com.onlineshop.catalog.dto.ItemCreateDto;
-import com.onlineshop.catalog.dto.ItemDto;
+import com.onlineshop.catalog.dto.*;
 import com.onlineshop.catalog.service.CatalogService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -55,9 +52,14 @@ public class CatalogController {
         catalogService.deleteItemById(id);
     }
 
-    @PutMapping("/catalog/item/{id}")
-    public ItemDto updateItemById(@PathVariable("id") UUID id) {
-        return catalogService.updateItemById(id);
+    @PutMapping("/catalog/item/{id}/price")
+    public ItemDto changePriceOfItemById(@RequestBody @Validated ItemPriceChangeDto dto, @PathVariable("id") UUID id) {
+        return catalogService.changePriceOfItemById(id, dto);
+    }
+
+    @PutMapping("/catalog/item/{id}/amount")
+    public ItemDto changeAmountOfItemById(@RequestBody @Validated ItemAmountChangeDto dto, @PathVariable("id") UUID id) {
+        return catalogService.changeAmountOfItemById(id, dto);
     }
 
 }
