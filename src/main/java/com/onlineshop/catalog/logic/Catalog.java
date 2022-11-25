@@ -20,27 +20,24 @@ public class Catalog implements AggregateState<UUID, CatalogAggregate> {
 
     private ArrayList<ItemEntity> Items = new ArrayList<>();
 
-    public CatalogCreatedEvent CreateNewCatalog() {
-        id = UUID.randomUUID();
-        return new CatalogCreatedEvent(id);
-    }
 
-    public ItemAddedToTheCatalogEvent addItemToCatalog(ItemEntity item) {
+
+    public CreatedItemEvent addItemToCatalog(ItemEntity item) {
         if (Items.contains(item)) {
             throw new IllegalArgumentException("Item already exists");
         }
-        return new ItemAddedToTheCatalogEvent(item.getId(), item.getName(), item.getDescription(), item.getPrice(), item.getAmount());
+        return new CreatedItemEvent(item.getId(), item.getName(), item.getDescription(), item.getPrice(), item.getAmount());
     }
 
-    public itemRemovedFromTheCatalogEvent removeItemFromCatalog(ItemEntity item) {
+    public ItemRemovedFromTheCatalogEvent removeItemFromCatalog(ItemEntity item) {
         if (!Items.contains(item)) {
             throw new IllegalArgumentException("No such item");
         }
         Items.remove(item);
-        return new itemRemovedFromTheCatalogEvent(item.getId());
+        return new ItemRemovedFromTheCatalogEvent(item.getId());
     }
 
-    public itemPriceChangedEvent changeItemPrice(ItemEntity item, int price) {
+    public ItemPriceChangedEvent changeItemPrice(ItemEntity item, int price) {
         if (!Items.contains(item)) {
             throw new IllegalArgumentException("No such item");
         }
@@ -49,7 +46,7 @@ public class Catalog implements AggregateState<UUID, CatalogAggregate> {
                 ouritem.setPrice(price);
             }
         }
-        return new itemPriceChangedEvent(item.getId(), item.getPrice());
+        return new ItemPriceChangedEvent(item.getId(), item.getPrice());
     }
 
     public ItemRefiledEvent refilItem(ItemEntity item, int amount) {

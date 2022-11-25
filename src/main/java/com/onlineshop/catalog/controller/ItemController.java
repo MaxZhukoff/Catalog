@@ -1,15 +1,17 @@
 package com.onlineshop.catalog.controller;
 
+import com.onlineshop.catalog.api.ItemAggregate;
+import com.onlineshop.catalog.api.events.CreatedItemEvent;
 import com.onlineshop.catalog.dto.ItemAmountChangeDto;
 import com.onlineshop.catalog.dto.ItemCreateDto;
 import com.onlineshop.catalog.dto.ItemDto;
 import com.onlineshop.catalog.dto.ItemPriceChangeDto;
-import com.onlineshop.catalog.service.ItemService;
+import com.onlineshop.catalog.logic.Item;
 import lombok.AllArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.quipy.core.EventSourcingService;
 
-import java.util.List;
 import java.util.UUID;
 
 @AllArgsConstructor
@@ -17,19 +19,21 @@ import java.util.UUID;
 @RequestMapping("/catalog/items")
 public class ItemController {
 
-    private final ItemService itemService;
-
-    @GetMapping
-    public List<ItemDto> getAllItems() {
-        return itemService.getAllItems();
-    }
+    private final EventSourcingService<UUID, ItemAggregate, Item> accountEsService;
 
     @PostMapping
-    public ItemDto createItem(@RequestBody @Validated ItemCreateDto item) {
-        return itemService.createItem(item);
+    public CreatedItemEvent createItem(@RequestBody @Validated ItemCreateDto item) {
+
+        return accountEsService.create(x -> x.createItem(item.name(), item.description(), item.price(), item.amount()));
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{itemId}")
+    public Item getItem(@PathVariable("itemId") UUID itemId) {
+
+        return accountEsService.getState(itemId);
+    }
+
+/*    @GetMapping("/{id}")
     public ItemDto getItemById(@PathVariable UUID id) {
         return itemService.getItemByID(id);
     }
@@ -51,6 +55,6 @@ public class ItemController {
                                           @PathVariable("id") UUID id) {
 
         return itemService.changeAmountOfItemById(id, dto);
-    }
+    }*/
 
 }

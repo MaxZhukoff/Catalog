@@ -10,8 +10,8 @@ import java.util.UUID;
 import static com.onlineshop.catalog.api.events.ItemEventValue.ITEM_REMOVED_FROM_THE_CATALOG;
 
 @DomainEvent(name = ITEM_REMOVED_FROM_THE_CATALOG)
-public class itemRemovedFromTheCatalogEvent extends Event<CatalogAggregate> {
-    public itemRemovedFromTheCatalogEvent(UUID id) {
+public class ItemRemovedFromTheCatalogEvent extends Event<CatalogAggregate> {
+    public ItemRemovedFromTheCatalogEvent(UUID id) {
         super(UUID.randomUUID(), ITEM_REMOVED_FROM_THE_CATALOG, 1, new Date().getTime());
         this.id = id;
     }

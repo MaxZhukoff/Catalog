@@ -6,5 +6,4 @@ public class ItemEventValue {
     final static String ITEM_REFILED = "ITEM_REFILED_EVENT";
     final static String ITEM_PRICE_CHANGED = "ITEM_PRICE_CHANGED_EVENT";
     final static String ITEM_SOLD_OUT = "ITEM_SOLD_OUT_EVENT";
-    final static String CATALOG_CREATED = "CATALOG_CREATED_EVENT";
 }

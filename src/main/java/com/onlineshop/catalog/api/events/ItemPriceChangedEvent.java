@@ -10,8 +10,8 @@ import java.util.UUID;
 import static com.onlineshop.catalog.api.events.ItemEventValue.ITEM_PRICE_CHANGED;
 
 @DomainEvent(name = ITEM_PRICE_CHANGED)
-public class itemPriceChangedEvent extends Event<CatalogAggregate>{
-    public itemPriceChangedEvent(UUID id, int price) {
+public class ItemPriceChangedEvent extends Event<CatalogAggregate>{
+    public ItemPriceChangedEvent(UUID id, int price) {
         super(UUID.randomUUID(), ITEM_PRICE_CHANGED, 1, new Date().getTime());
         this.id = id;
         this.price = price;
