@@ -1,14 +1,10 @@
 package com.onlineshop.catalog.service;
 
 import com.onlineshop.catalog.dto.ItemCreateDto;
-import com.onlineshop.catalog.entity.CategoryEntity;
 import com.onlineshop.catalog.entity.ItemEntity;
 import com.onlineshop.catalog.dto.ItemDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-
-import java.util.Optional;
-import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -20,17 +16,15 @@ public class ItemMapper {
                 model.name(),
                 model.description(),
                 model.price(),
-                model.amount(),
-                model.category()
+                model.amount()
         );
     }
 
-    public ItemEntity itemCreateDtoToEntity(ItemCreateDto model, CategoryEntity category) {
+    public ItemEntity itemCreateDtoToEntity(ItemCreateDto model) {
         return ItemEntity.builder()
                 .name(model.name())
                 .description(model.description())
                 .price(model.price())
-                .category(category)
                 .build();
     }
 
@@ -40,8 +34,8 @@ public class ItemMapper {
                 itemEntity.getName(),
                 itemEntity.getDescription(),
                 itemEntity.getPrice(),
-                itemEntity.getAmount(),
-                itemEntity.getCategory());
+                itemEntity.getAmount()
+        );
     }
 
 

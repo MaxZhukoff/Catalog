@@ -1,7 +1,7 @@
 package com.onlineshop.catalog.logic;
 
 import com.onlineshop.catalog.api.CatalogAggregate;
-import com.onlineshop.catalog.api.Events.*;
+import com.onlineshop.catalog.api.events.*;
 import com.onlineshop.catalog.entity.ItemEntity;
 import org.jetbrains.annotations.Nullable;
 import ru.quipy.domain.AggregateState;
@@ -20,41 +20,45 @@ public class Catalog implements AggregateState<UUID, CatalogAggregate> {
 
     private ArrayList<ItemEntity> Items = new ArrayList<>();
 
-    public CatalogCreatedEvent CreateNewCatalog(){
+    public CatalogCreatedEvent CreateNewCatalog() {
         id = UUID.randomUUID();
         return new CatalogCreatedEvent(id);
     }
 
-    public ItemAddedToTheCatalogEvent AddItemToCatalog (ItemEntity item){
-        if(Items.contains(item)){throw new IllegalArgumentException("Item already exists");}
+    public ItemAddedToTheCatalogEvent addItemToCatalog(ItemEntity item) {
+        if (Items.contains(item)) {
+            throw new IllegalArgumentException("Item already exists");
+        }
         return new ItemAddedToTheCatalogEvent(item.getId(), item.getName(), item.getDescription(), item.getPrice(), item.getAmount());
     }
 
-    public ItemRemovedFromTheCatalogEvent RemoveItemFromCatalog(ItemEntity item){
-        if(!Items.contains(item)){
+    public itemRemovedFromTheCatalogEvent removeItemFromCatalog(ItemEntity item) {
+        if (!Items.contains(item)) {
             throw new IllegalArgumentException("No such item");
         }
         Items.remove(item);
-        return new ItemRemovedFromTheCatalogEvent(item.getId());
+        return new itemRemovedFromTheCatalogEvent(item.getId());
     }
-    public ItemPriceChangedEvent ChangeItemPrice(ItemEntity item, int price){
-        if(!Items.contains(item)){
+
+    public itemPriceChangedEvent changeItemPrice(ItemEntity item, int price) {
+        if (!Items.contains(item)) {
             throw new IllegalArgumentException("No such item");
         }
-        for (ItemEntity ouritem : Items){
-            if(ouritem.equals(item)){
+        for (ItemEntity ouritem : Items) {
+            if (ouritem.equals(item)) {
                 ouritem.setPrice(price);
             }
         }
-        return new ItemPriceChangedEvent(item.getId(), item.getPrice());
+        return new itemPriceChangedEvent(item.getId(), item.getPrice());
     }
-    public ItemRefiledEvent RefilItem(ItemEntity item, int amount){
-        if(!Items.contains(item)){
+
+    public ItemRefiledEvent refilItem(ItemEntity item, int amount) {
+        if (!Items.contains(item)) {
             throw new IllegalArgumentException("No such item");
         }
-        for (ItemEntity ouritem : Items){
-            if(ouritem.equals(item)){
-                ouritem.setAmount(amount);
+        for (ItemEntity ourItem : Items) {
+            if (ourItem.equals(item)) {
+                ourItem.setAmount(amount);
             }
         }
         return new ItemRefiledEvent(item.getId(), item.getAmount());

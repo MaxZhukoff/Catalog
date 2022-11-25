@@ -1,4 +1,4 @@
-package com.onlineshop.catalog.api.Events;
+package com.onlineshop.catalog.api.events;
 
 import com.onlineshop.catalog.api.CatalogAggregate;
 import ru.quipy.core.annotations.DomainEvent;
@@ -7,11 +7,11 @@ import ru.quipy.domain.Event;
 import java.util.Date;
 import java.util.UUID;
 
-import static com.onlineshop.catalog.api.Events.ItemEventValue.ITEM_REMOVED_FROM_THE_CATALOG;
+import static com.onlineshop.catalog.api.events.ItemEventValue.ITEM_REMOVED_FROM_THE_CATALOG;
 
 @DomainEvent(name = ITEM_REMOVED_FROM_THE_CATALOG)
-public class ItemRemovedFromTheCatalogEvent extends Event<CatalogAggregate> {
-    public ItemRemovedFromTheCatalogEvent(UUID id) {
+public class itemRemovedFromTheCatalogEvent extends Event<CatalogAggregate> {
+    public itemRemovedFromTheCatalogEvent(UUID id) {
         super(UUID.randomUUID(), ITEM_REMOVED_FROM_THE_CATALOG, 1, new Date().getTime());
         this.id = id;
     }

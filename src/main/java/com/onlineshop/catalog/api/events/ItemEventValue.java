@@ -1,4 +1,4 @@
-package com.onlineshop.catalog.api.Events;
+package com.onlineshop.catalog.api.events;
 
 public class ItemEventValue {
     final static String ITEM_ADDED_TO_THE_CATALOG = "ITEM_ADDED_TO_THE_CATALOG_EVENT";

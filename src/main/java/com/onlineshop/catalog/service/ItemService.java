@@ -1,7 +1,6 @@
 package com.onlineshop.catalog.service;
 
 import com.onlineshop.catalog.dto.*;
-import com.onlineshop.catalog.entity.CategoryEntity;
 import com.onlineshop.catalog.entity.ItemEntity;
 import com.onlineshop.catalog.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,16 +18,12 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Service
 public class ItemService {
-
-    private final CategoryService categoryService;
     private final ItemRepository itemRepository;
     private final ItemMapper itemMapper;
 
     public ItemDto createItem(ItemCreateDto itemCreateDto) throws IllegalArgumentException {
 
-        CategoryEntity categoryEntity = categoryService.getCategoryEntityById(UUID.fromString(itemCreateDto.categoryId()));
-
-        ItemEntity itemEntity = itemMapper.itemCreateDtoToEntity(itemCreateDto, categoryEntity);
+        ItemEntity itemEntity = itemMapper.itemCreateDtoToEntity(itemCreateDto);
 
         final ItemEntity createdItem = itemRepository.saveAndFlush(itemEntity);
 

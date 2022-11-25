@@ -1,4 +1,4 @@
-package com.onlineshop.catalog.api.Events;
+package com.onlineshop.catalog.api.events;
 
 import com.onlineshop.catalog.api.CatalogAggregate;
 import ru.quipy.core.annotations.DomainEvent;
@@ -7,7 +7,7 @@ import ru.quipy.domain.Event;
 import java.util.Date;
 import java.util.UUID;
 
-import static com.onlineshop.catalog.api.Events.ItemEventValue.ITEM_SOLD_OUT;
+import static com.onlineshop.catalog.api.events.ItemEventValue.ITEM_SOLD_OUT;
 
 @DomainEvent(name = ITEM_SOLD_OUT)
 public class ItemSoldOutEvent extends Event<CatalogAggregate> {
