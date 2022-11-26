@@ -52,29 +52,4 @@ public class ItemController {
 
         return accountEsService.update(itemId, x -> x.changeItemPrice(itemId, dto.amount()));
     }
-
-/*    @GetMapping("/{id}")
-    public ItemDto getItemById(@PathVariable UUID id) {
-        return itemService.getItemByID(id);
-    }
-
-    @DeleteMapping("/{id}")
-    public void deleteItemById(@PathVariable UUID id) {
-        itemService.deleteItemById(id);
-    }
-
-    @PutMapping("/{id}/price")
-    public ItemDto changePriceOfItemById(@RequestBody @Validated ItemPriceChangeDto dto,
-                                         @PathVariable("id") UUID id) {
-
-        return itemService.changePriceOfItemById(id, dto);
-    }
-
-    @PutMapping("/{id}/amount")
-    public ItemDto changeAmountOfItemById(@RequestBody @Validated ItemAmountChangeDto dto,
-                                          @PathVariable("id") UUID id) {
-
-        return itemService.changeAmountOfItemById(id, dto);
-    }*/
-
 }
