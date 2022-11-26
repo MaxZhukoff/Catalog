@@ -16,10 +16,10 @@ public class CreatedItemEvent extends Event<ItemAggregate> {
     final UUID id;
     final String name;
     final String description;
-    final double price;
-    final double amount;
+    final long price;
+    final long amount;
 
-    public CreatedItemEvent(UUID id, String name, String description, double price, double amount) {
+    public CreatedItemEvent(UUID id, String name, String description, long price, long amount) {
 
         super(UUID.randomUUID(), ITEM_ADDED_TO_THE_CATALOG, 1, new Date().getTime());
         this.id = id;

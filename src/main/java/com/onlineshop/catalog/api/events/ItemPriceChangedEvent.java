@@ -11,11 +11,11 @@ import static com.onlineshop.catalog.api.events.ItemEventValue.ITEM_PRICE_CHANGE
 
 @DomainEvent(name = ITEM_PRICE_CHANGED)
 public class ItemPriceChangedEvent extends Event<CatalogAggregate>{
-    public ItemPriceChangedEvent(UUID id, int price) {
+    public ItemPriceChangedEvent(UUID id, long price) {
         super(UUID.randomUUID(), ITEM_PRICE_CHANGED, 1, new Date().getTime());
         this.id = id;
         this.price = price;
     }
     final UUID id;
-    final int price;
+    final long price;
 }

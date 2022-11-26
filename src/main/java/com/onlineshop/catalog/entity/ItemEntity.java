@@ -14,7 +14,7 @@ public class ItemEntity {
 
     private String description;
 
-    private int price;
+    private long price;
 
-    private int amount;
+    private long amount;
 }

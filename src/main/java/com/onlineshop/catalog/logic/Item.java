@@ -10,13 +10,14 @@ import org.jetbrains.annotations.Nullable;
 import ru.quipy.core.annotations.StateTransitionFunc;
 import ru.quipy.domain.AggregateState;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class Item implements AggregateState<UUID, ItemAggregate> {
 
     private UUID itemId;
+
+
+    private Map<UUID, ItemEntity> items = new HashMap();
 /*    private List<ItemEntity> items = new ArrayList<>();*/
 
     @Nullable
@@ -28,9 +29,33 @@ public class Item implements AggregateState<UUID, ItemAggregate> {
     /**
      * add item to the catalog
      */
-    public CreatedItemEvent createItem(String name, String description, double price, double amount) {
+    public CreatedItemEvent createItem(String name, String description, long price, long amount) {
 
         return new CreatedItemEvent(UUID.randomUUID(), name, description, price, amount);
+    }
+
+    public ItemRemovedFromTheCatalogEvent removeItem(UUID itemId) {
+        if (!items.containsKey(itemId)) {
+            throw new IllegalArgumentException("No such item");
+        }
+        items.remove(itemId);
+        return new ItemRemovedFromTheCatalogEvent(itemId);
+    }
+
+    public ItemPriceChangedEvent changeItemPrice(UUID itemId, long price) {
+        if (!items.containsKey(itemId)) {
+            throw new IllegalArgumentException("No such item");
+        }
+        items.get(itemId).setPrice(price);
+        return new ItemPriceChangedEvent(itemId, price);
+    }
+
+    public ItemRefiledEvent changeItemAmount(UUID itemId, long amount) {
+        if (!items.containsKey(itemId)) {
+            throw new IllegalArgumentException("No such item");
+        }
+        items.get(itemId).setAmount(amount);
+        return new ItemRefiledEvent(itemId, amount);
     }
 
     @StateTransitionFunc

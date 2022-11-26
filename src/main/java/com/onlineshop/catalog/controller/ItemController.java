@@ -2,6 +2,8 @@ package com.onlineshop.catalog.controller;
 
 import com.onlineshop.catalog.api.ItemAggregate;
 import com.onlineshop.catalog.api.events.CreatedItemEvent;
+import com.onlineshop.catalog.api.events.ItemPriceChangedEvent;
+import com.onlineshop.catalog.api.events.ItemRemovedFromTheCatalogEvent;
 import com.onlineshop.catalog.dto.ItemAmountChangeDto;
 import com.onlineshop.catalog.dto.ItemCreateDto;
 import com.onlineshop.catalog.dto.ItemDto;
@@ -31,6 +33,24 @@ public class ItemController {
     public Item getItem(@PathVariable("itemId") UUID itemId) {
 
         return accountEsService.getState(itemId);
+    }
+
+    @DeleteMapping("/{itemId}")
+    public ItemRemovedFromTheCatalogEvent deleteItem(@PathVariable("itemId") UUID itemId) {
+        return accountEsService.update(itemId, x -> x.removeItem(itemId));
+    }
+
+    @PutMapping("/{id}/price")
+    public ItemPriceChangedEvent changePriceOfItem(@RequestBody @Validated ItemPriceChangeDto dto,
+                                                   @PathVariable("id") UUID itemId) {
+        return accountEsService.update(itemId, x -> x.changeItemPrice(itemId, dto.price()));
+    }
+
+    @PutMapping("/{id}/amount")
+    public ItemDto changeAmountOfItemById(@RequestBody @Validated ItemAmountChangeDto dto,
+                                          @PathVariable("id") UUID itemId) {
+
+        return accountEsService.update(itemId, x -> x.changeItemPrice(itemId, dto.amount()));
     }
 
 /*    @GetMapping("/{id}")
