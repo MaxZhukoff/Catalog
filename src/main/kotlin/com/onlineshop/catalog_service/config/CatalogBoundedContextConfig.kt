@@ -18,5 +18,4 @@ class CatalogBoundedContextConfig {
     @Bean
     fun catalogEsService(): EventSourcingService<UUID, CatalogAggregate, Catalog> =
         eventSourcingServiceFactory.create()
-    //TODO хз что за ошибка
 }
