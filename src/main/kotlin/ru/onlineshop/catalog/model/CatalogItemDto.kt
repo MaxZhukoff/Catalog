@@ -1,4 +1,4 @@
-package com.onlineshop.catalog_service.model
+package ru.onlineshop.catalog.model
 
 import java.util.*
 

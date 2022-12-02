@@ -1,4 +1,4 @@
-package com.onlineshop.catalog_service.config
+package ru.onlineshop.catalog.config
 
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -13,7 +13,7 @@ import org.springframework.data.mongodb.core.query.Query
 import ru.quipy.core.exceptions.DuplicateEventIdException
 import ru.quipy.database.EventStoreDbOperations
 import ru.quipy.domain.*
-import com.onlineshop.catalog_service.config.MongoDbEventStoreDbOperations.Companion.logger
+import ru.onlineshop.catalog.config.MongoDbEventStoreDbOperations.Companion.logger
 
 class MongoDbEventStoreDbOperations : EventStoreDbOperations {
     companion object {

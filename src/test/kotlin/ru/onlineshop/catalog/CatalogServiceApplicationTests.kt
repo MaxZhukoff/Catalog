@@ -1,4 +1,4 @@
-package com.onlineshop.catalog_service
+package ru.onlineshop.catalog
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest

@@ -1,4 +1,4 @@
-package com.onlineshop.catalog_service
+package ru.onlineshop.catalog
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

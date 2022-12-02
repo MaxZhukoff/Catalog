@@ -1,4 +1,4 @@
-package com.onlineshop.catalog_service.config
+package ru.onlineshop.catalog.config
 
 
 import com.fasterxml.jackson.databind.ObjectMapper
