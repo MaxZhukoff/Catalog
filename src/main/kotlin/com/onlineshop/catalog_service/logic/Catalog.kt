@@ -2,9 +2,7 @@ package com.onlineshop.catalog_service.logic
 
 import com.onlineshop.catalog_service.api.*
 import ru.quipy.domain.AggregateState
-import java.lang.IllegalArgumentException
 import java.util.*
-import kotlin.collections.ArrayList
 
 class Catalog : AggregateState<UUID, CatalogAggregate>{
     private lateinit var id: UUID
@@ -16,12 +14,12 @@ class Catalog : AggregateState<UUID, CatalogAggregate>{
         return CatalogCreatedEvent(id)
     }
 
-    fun addItemToCatalog (id: UUID, name : String, description: String, amount: Int, price: Int, category: String) : ItemAddedEvent{
+    fun addItemToCatalog (id: UUID, title : String, description: String, amount: Int, price: Int, category: String) : ItemAddedEvent{
         if(ItemList.containsKey(id)){
             throw IllegalArgumentException("Item with id $id is already exists")
         }
         //TODO хз, надо ли создавать итем и добавлять его в мапу
-        return ItemAddedEvent(id, name, description, amount, price, category)
+        return ItemAddedEvent(id, title, description, amount, price, category)
     }
     fun deleteIttemFromCatalog (id : UUID) : ItemRemovedEvent{
         if (!ItemList.containsKey(id)){
@@ -46,7 +44,7 @@ class Catalog : AggregateState<UUID, CatalogAggregate>{
 
 data class Item(
     val id : UUID,
-    val name : String,
+    val title : String,
     val description : String,
     val price : Int,
     val amount : Int,
