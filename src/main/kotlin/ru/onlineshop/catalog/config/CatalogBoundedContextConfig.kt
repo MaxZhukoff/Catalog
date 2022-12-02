@@ -16,6 +16,6 @@ class CatalogBoundedContextConfig {
     private lateinit var eventSourcingServiceFactory : EventSourcingServiceFactory
 
     @Bean
-    fun catalogEsService(): EventSourcingService<String, CatalogAggregate, CatalogAggregateState> =
+    fun catalogEsService(): EventSourcingService<UUID, CatalogAggregate, CatalogAggregateState> =
         eventSourcingServiceFactory.create()
 }

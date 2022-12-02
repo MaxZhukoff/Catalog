@@ -9,7 +9,7 @@ import java.util.*
 @RestController
 @RequestMapping("/catalog")
 class CatalogController(
-    val catalogEsService: EventSourcingService<String, CatalogAggregate, CatalogAggregateState>
+    val catalogEsService: EventSourcingService<UUID, CatalogAggregate, CatalogAggregateState>
 ) {
 //    @PostMapping("/{catalogId}/{itemId}")
 //    fun addItemToCatalog (@RequestBody item : CatalogItemDto) : ItemAddedEvent {

@@ -1,21 +1,27 @@
 package ru.onlineshop.catalog.logic
 
 import ru.onlineshop.catalog.api.*
+import ru.quipy.core.annotations.StateTransitionFunc
 import ru.quipy.domain.AggregateState
 import java.util.*
 
-class CatalogAggregateState : AggregateState<String, CatalogAggregate>{
-    private lateinit var projectId: String
+class CatalogAggregateState : AggregateState<UUID, CatalogAggregate>{
+    private lateinit var catalogId: UUID
     private var createdAt: Long = System.currentTimeMillis()
     private var updatedAt: Long = System.currentTimeMillis()
     
 //    var itemList: MutableMap<UUID, Item> = mutableMapOf()
 
-    override fun getId() = projectId
+    override fun getId() = catalogId
 
-//    fun createCatalog(id: UUID = UUID.randomUUID()) : CatalogCreatedEvent {
-//        return CatalogCreatedEvent(id)
-//    }
+    fun createCatalog(id: UUID = UUID.randomUUID()) : CatalogCreatedEvent {
+        return CatalogCreatedEvent(id)
+    }
+
+    @StateTransitionFunc
+    fun createNewCatalog(event: CatalogCreatedEvent) {
+        catalogId = event.catalogId
+    }
 
 //    fun addItemToCatalog (id: UUID, title : String, description: String, amount: Int, price: Int, category: String) : ItemAddedEvent {
 //        if(itemList.containsKey(id)){
