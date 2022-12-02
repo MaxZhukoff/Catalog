@@ -48,6 +48,13 @@ class CatalogController(
         }
     }
 
+    @PatchMapping("/_internal/catalogItem/{itemId}")
+    fun changeAmountItem(@PathVariable itemId: UUID, @RequestParam amountChangeTo: Int): ItemAmountChangedEvent? {
+        return catalogEsService.update("catalog") {
+            it.changeAmountItem(itemId, amountChangeTo)
+        }
+    }
+
 
 
 //    @PostMapping("/{catalogId}/{itemId}")

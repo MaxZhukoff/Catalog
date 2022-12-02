@@ -43,6 +43,17 @@ class CatalogAggregateState : AggregateState<String, CatalogAggregate> {
         items.remove(event.itemId)
     }
 
+    fun changeAmountItem(itemId: UUID, amountChangeTo: Int): ItemAmountChangedEvent {
+        if (!items.containsKey(itemId)) {
+            throw IllegalArgumentException("No such item with id $itemId")
+        }
+        return ItemAmountChangedEvent(itemId, amountChangeTo)
+    }
+    @StateTransitionFunc
+    fun changeAmountItem(event: ItemAmountChangedEvent) {
+        items[event.itemId]!!.amount += event.amountChangeTo
+    }
+
 //    fun changeItemPrice (id : UUID, price : Int) : ItemPriceChangedEvent {
 //        if (!itemList.containsKey(id)){
 //            throw IllegalArgumentException("No such item with id $id")
@@ -63,5 +74,5 @@ data class Item(
     val title: String,
     val description: String,
     val price: Int,
-    val amount: Int
+    var amount: Int
 )
