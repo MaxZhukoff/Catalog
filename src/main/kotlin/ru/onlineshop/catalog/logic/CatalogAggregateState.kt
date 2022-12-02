@@ -6,7 +6,7 @@ import ru.quipy.domain.AggregateState
 import java.util.*
 
 class CatalogAggregateState : AggregateState<String, CatalogAggregate> {
-    private var catalogId: String = "catalog"
+    private lateinit var catalogId: String
 
     var items: MutableMap<UUID, Item> = mutableMapOf()
 
@@ -14,25 +14,35 @@ class CatalogAggregateState : AggregateState<String, CatalogAggregate> {
 
     fun addItemToCatalog(itemId: UUID = UUID.randomUUID(), title: String, description: String, price: Int, amount: Int)
             : ItemAddedEvent {
-        println(catalogId)
         if (items.containsKey(itemId)) {
             throw IllegalArgumentException("Item with id $itemId is already exists")
         }
         return ItemAddedEvent(itemId, title, description, amount, price)
     }
-
     @StateTransitionFunc
     fun addItemToCatalog(event: ItemAddedEvent) {
         items[event.itemId] = Item(event.itemId, event.title, event.description, event.price, event.amount)
     }
 
+    fun createCatalog(): CatalogCreateEvent {
+        return CatalogCreateEvent()
+    }
+    @StateTransitionFunc
+    fun createCatalog(event: CatalogCreateEvent) {
+        catalogId = event.catalogId
+    }
 
-//    fun deleteItemFromCatalog (id : UUID) : ItemRemovedEvent {
-//        if (!itemList.containsKey(id)){
-//            throw IllegalArgumentException("No such item with id $id")
-//        }
-//        return ItemRemovedEvent(id)
-//    }
+    fun deleteItemFromCatalog(itemId: UUID): ItemRemovedEvent {
+        if (!items.containsKey(itemId)) {
+            throw IllegalArgumentException("No such item with id $itemId")
+        }
+        return ItemRemovedEvent(itemId)
+    }
+    @StateTransitionFunc
+    fun deleteItemFromCatalog(event: ItemRemovedEvent) {
+        items.remove(event.itemId)
+    }
+
 //    fun changeItemPrice (id : UUID, price : Int) : ItemPriceChangedEvent {
 //        if (!itemList.containsKey(id)){
 //            throw IllegalArgumentException("No such item with id $id")

@@ -4,7 +4,6 @@ import ru.onlineshop.catalog.logic.CatalogAggregateState
 import org.springframework.web.bind.annotation.*
 import ru.onlineshop.catalog.api.*
 import ru.onlineshop.catalog.logic.Item
-import ru.onlineshop.catalog.model.CatalogItemDto
 import ru.onlineshop.catalog.model.ItemCreateDto
 import ru.quipy.core.EventSourcingService
 import java.util.*
@@ -13,6 +12,12 @@ import java.util.*
 class CatalogController(
     val catalogEsService: EventSourcingService<String, CatalogAggregate, CatalogAggregateState>
 ) {
+    @PostMapping("/_internal/catalog")
+    fun createCatalog(): CatalogCreateEvent {
+        return catalogEsService.create {
+            it.createCatalog()
+        }
+    }
 
     @GetMapping("/items/{itemId}")
     fun getItem(@PathVariable itemId: UUID): Item? {
@@ -26,7 +31,7 @@ class CatalogController(
 
     @PostMapping("/_internal/catalogItem")
     fun addItem(@RequestBody dto: ItemCreateDto): ItemAddedEvent {
-        return catalogEsService.create {
+        return catalogEsService.update("catalog") {
             it.addItemToCatalog(
                 title = dto.title,
                 description = dto.description,
@@ -35,6 +40,14 @@ class CatalogController(
             )
         }
     }
+
+    @DeleteMapping("/_internal/catalogItem/{itemId}")
+    fun deleteItem(@PathVariable itemId: UUID) {
+        catalogEsService.update("catalog") {
+            it.deleteItemFromCatalog(itemId)
+        }
+    }
+
 
 
 //    @PostMapping("/{catalogId}/{itemId}")
