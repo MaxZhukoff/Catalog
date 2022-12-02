@@ -3,14 +3,40 @@ package ru.onlineshop.catalog.controller
 import ru.onlineshop.catalog.logic.CatalogAggregateState
 import org.springframework.web.bind.annotation.*
 import ru.onlineshop.catalog.api.*
+import ru.onlineshop.catalog.logic.Item
+import ru.onlineshop.catalog.model.CatalogItemDto
+import ru.onlineshop.catalog.model.ItemCreateDto
 import ru.quipy.core.EventSourcingService
 import java.util.*
 
 @RestController
-@RequestMapping("/catalog")
 class CatalogController(
-    val catalogEsService: EventSourcingService<UUID, CatalogAggregate, CatalogAggregateState>
+    val catalogEsService: EventSourcingService<String, CatalogAggregate, CatalogAggregateState>
 ) {
+
+    @GetMapping("/items/{itemId}")
+    fun getItem(@PathVariable itemId: UUID): Item? {
+        return catalogEsService.getState("catalog")!!.items[itemId]
+    }
+
+    @GetMapping("/items")
+    fun getAllItems(): List<Item>? {
+        return catalogEsService.getState("catalog")!!.items.values.toList()
+    }
+
+    @PostMapping("/_internal/catalogItem")
+    fun addItem(@RequestBody dto: ItemCreateDto): ItemAddedEvent {
+        return catalogEsService.create {
+            it.addItemToCatalog(
+                title = dto.title,
+                description = dto.description,
+                price = dto.price,
+                amount = dto.amount
+            )
+        }
+    }
+
+
 //    @PostMapping("/{catalogId}/{itemId}")
 //    fun addItemToCatalog (@RequestBody item : CatalogItemDto) : ItemAddedEvent {
 //        return catalogEsService.create { it.addItemToCatalog(item.id, item.title, item.description, item.amount, item.price, item.category) }

@@ -5,31 +5,28 @@ import ru.quipy.core.annotations.StateTransitionFunc
 import ru.quipy.domain.AggregateState
 import java.util.*
 
-class CatalogAggregateState : AggregateState<UUID, CatalogAggregate>{
-    private lateinit var catalogId: UUID
-    private var createdAt: Long = System.currentTimeMillis()
-    private var updatedAt: Long = System.currentTimeMillis()
-    
-//    var itemList: MutableMap<UUID, Item> = mutableMapOf()
+class CatalogAggregateState : AggregateState<String, CatalogAggregate> {
+    private var catalogId: String = "catalog"
+
+    var items: MutableMap<UUID, Item> = mutableMapOf()
 
     override fun getId() = catalogId
 
-    fun createCatalog(id: UUID = UUID.randomUUID()) : CatalogCreatedEvent {
-        return CatalogCreatedEvent(id)
+    fun addItemToCatalog(itemId: UUID = UUID.randomUUID(), title: String, description: String, price: Int, amount: Int)
+            : ItemAddedEvent {
+        println(catalogId)
+        if (items.containsKey(itemId)) {
+            throw IllegalArgumentException("Item with id $itemId is already exists")
+        }
+        return ItemAddedEvent(itemId, title, description, amount, price)
     }
 
     @StateTransitionFunc
-    fun createNewCatalog(event: CatalogCreatedEvent) {
-        catalogId = event.catalogId
+    fun addItemToCatalog(event: ItemAddedEvent) {
+        items[event.itemId] = Item(event.itemId, event.title, event.description, event.price, event.amount)
     }
 
-//    fun addItemToCatalog (id: UUID, title : String, description: String, amount: Int, price: Int, category: String) : ItemAddedEvent {
-//        if(itemList.containsKey(id)){
-//            throw IllegalArgumentException("Item with id $id is already exists")
-//        }
-//        //TODO хз, надо ли создавать итем и добавлять его в мапу
-//        return ItemAddedEvent(id, title, description, amount, price, category)
-//    }
+
 //    fun deleteItemFromCatalog (id : UUID) : ItemRemovedEvent {
 //        if (!itemList.containsKey(id)){
 //            throw IllegalArgumentException("No such item with id $id")
@@ -51,11 +48,10 @@ class CatalogAggregateState : AggregateState<UUID, CatalogAggregate>{
     //TODO не уверен надо делать изменение количества товара или только его пополнения, если что пофиксите
 }
 
-//data class Item(
-//    val id : UUID,
-//    val title : String,
-//    val description : String,
-//    val price : Int,
-//    val amount : Int,
-//    val category : String,
-//)
+data class Item(
+    val id: UUID,
+    val title: String,
+    val description: String,
+    val price: Int,
+    val amount: Int
+)
