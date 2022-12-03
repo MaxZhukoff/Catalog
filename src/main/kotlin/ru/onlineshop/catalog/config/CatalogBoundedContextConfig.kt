@@ -1,7 +1,7 @@
-package com.onlineshop.catalog_service.config
+package ru.onlineshop.catalog.config
 
-import com.onlineshop.catalog_service.api.CatalogAggregate
-import com.onlineshop.catalog_service.logic.Catalog
+import ru.onlineshop.catalog.api.CatalogAggregate
+import ru.onlineshop.catalog.logic.CatalogAggregateState
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -16,6 +16,6 @@ class CatalogBoundedContextConfig {
     private lateinit var eventSourcingServiceFactory : EventSourcingServiceFactory
 
     @Bean
-    fun catalogEsService(): EventSourcingService<UUID, CatalogAggregate, Catalog> =
+    fun catalogEsService(): EventSourcingService<String, CatalogAggregate, CatalogAggregateState> =
         eventSourcingServiceFactory.create()
 }

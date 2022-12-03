@@ -1,10 +1,12 @@
-package com.onlineshop.catalog_service.config
+package ru.onlineshop.catalog.config
+
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import ru.quipy.config.MongoDbEventStoreDbOperations
 import ru.quipy.core.*
 import ru.quipy.database.EventStoreDbOperations
 import ru.quipy.mapper.JsonEventMapper
