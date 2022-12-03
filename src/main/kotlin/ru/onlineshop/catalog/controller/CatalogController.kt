@@ -6,6 +6,7 @@ import ru.onlineshop.catalog.api.*
 import ru.onlineshop.catalog.logic.Item
 import ru.onlineshop.catalog.model.ItemCreateDto
 import ru.quipy.core.EventSourcingService
+import ru.quipy.domain.Event
 import java.util.*
 
 @RestController
@@ -55,10 +56,17 @@ class CatalogController(
         }
     }
 
-    @PatchMapping("/_internal/catalogItem/{itemId}/amount")
-    fun changeAmountItem(@PathVariable itemId: UUID, @RequestParam amountChangeTo: Int): ItemAmountChangedEvent? {
+    @PatchMapping("/_internal/catalogItem/{itemId}/refill")
+    fun refillItem(@PathVariable itemId: UUID, @RequestParam amountForRefill: Int): ItemRefiledEvent? {
         return catalogEsService.update("catalog") {
-            it.changeItemAmount(itemId, amountChangeTo)
+            it.refillItem(itemId, amountForRefill)
+        }
+    }
+
+    @PatchMapping("/_internal/catalogItem/{itemId}/sell")
+    fun sellItem(@PathVariable itemId: UUID, @RequestParam amountForSell: Int): Event<CatalogAggregate>? {
+        return catalogEsService.update("catalog") {
+            it.sellItem(itemId, amountForSell)
         }
     }
 }

@@ -3,6 +3,7 @@ package ru.onlineshop.catalog.logic
 import ru.onlineshop.catalog.api.*
 import ru.quipy.core.annotations.StateTransitionFunc
 import ru.quipy.domain.AggregateState
+import ru.quipy.domain.Event
 import java.util.*
 
 class CatalogAggregateState : AggregateState<String, CatalogAggregate> {
@@ -14,11 +15,6 @@ class CatalogAggregateState : AggregateState<String, CatalogAggregate> {
 
     fun createCatalog(): CatalogCreateEvent {
         return CatalogCreateEvent()
-    }
-
-    @StateTransitionFunc
-    fun createCatalog(event: CatalogCreateEvent) {
-        catalogId = event.catalogId
     }
 
     fun addItemToCatalog(
@@ -36,22 +32,12 @@ class CatalogAggregateState : AggregateState<String, CatalogAggregate> {
         return ItemAddedEvent(itemId, title, description, amount, price)
     }
 
-    @StateTransitionFunc
-    fun addItemToCatalog(event: ItemAddedEvent) {
-        items[event.itemId] = Item(event.itemId, event.title, event.description, event.price, event.amount)
-    }
-
     fun deleteItemFromCatalog(itemId: UUID): ItemRemovedEvent {
         if (!items.containsKey(itemId)) {
             throw IllegalArgumentException("No such item with id $itemId")
         }
 
         return ItemRemovedEvent(itemId)
-    }
-
-    @StateTransitionFunc
-    fun deleteItemFromCatalog(event: ItemRemovedEvent) {
-        items.remove(event.itemId)
     }
 
     fun changeItemPrice(itemId: UUID, newPrice: Int): ItemPriceChangedEvent {
@@ -62,40 +48,67 @@ class CatalogAggregateState : AggregateState<String, CatalogAggregate> {
         return ItemPriceChangedEvent(itemId, newPrice)
     }
 
+    fun refillItem(itemId: UUID, amountForRefill: Int): ItemRefiledEvent {
+        if (!items.containsKey(itemId)) {
+            throw IllegalArgumentException("No such item with id $itemId")
+        }
+
+        if (amountForRefill <= 0 || items[itemId]!!.amount + amountForRefill < 0) {
+            throw IllegalStateException("You can't store amount of item less than or equal to 0")
+        }
+
+        return ItemRefiledEvent(itemId, amountForRefill)
+    }
+
+    fun sellItem(itemId: UUID, amountForSell: Int): Event<CatalogAggregate> {
+        if (!items.containsKey(itemId)) {
+            throw IllegalArgumentException("No such item with id $itemId")
+        }
+
+        if (amountForSell <= 0 || items[itemId]!!.amount - amountForSell < 0) {
+            throw IllegalStateException("You can't sell item with amount less than or equal to 0")
+        }
+
+        if (items[itemId]!!.amount - amountForSell == 0) {
+            return ItemSoldOutEvent(itemId, amountForSell)
+        }
+
+        return ItemSoldEvent(itemId, amountForSell)
+    }
+
+    @StateTransitionFunc
+    fun createCatalog(event: CatalogCreateEvent) {
+        catalogId = event.catalogId
+    }
+
+    @StateTransitionFunc
+    fun addItemToCatalog(event: ItemAddedEvent) {
+        items[event.itemId] = Item(event.itemId, event.title, event.description, event.price, event.amount)
+    }
+
+    @StateTransitionFunc
+    fun deleteItemFromCatalog(event: ItemRemovedEvent) {
+        items.remove(event.itemId)
+    }
+
     @StateTransitionFunc
     fun changeItemPrice(event: ItemPriceChangedEvent) {
         items[event.itemId]!!.price = event.itemPrice
     }
 
-    fun changeItemAmount(itemId: UUID, amountChangeTo: Int): ItemAmountChangedEvent {
-        if (!items.containsKey(itemId)) {
-            throw IllegalArgumentException("No such item with id $itemId")
-        }
-
-        if (amountChangeTo < 0 && items[itemId]!!.amount + amountChangeTo < 0) {
-            throw IllegalStateException("You can't store amount of item less than 0")
-        }
-
-        if (items[itemId]!!.amount + amountChangeTo == 0) {
-            ItemSoldOutEvent(itemId)
-        } else if (items[itemId]!!.amount == 0 && amountChangeTo > 0) {
-            ItemRefiledEvent(itemId, amountChangeTo)
-        }
-
-        return ItemAmountChangedEvent(itemId, amountChangeTo)
+    @StateTransitionFunc
+    fun itemRefiled(event: ItemRefiledEvent) {
+        items[event.itemId]!!.amount += event.amount
     }
 
     @StateTransitionFunc
-    fun changeItemAmount(event: ItemAmountChangedEvent) {
-        items[event.itemId]!!.amount += event.amountChangeTo
+    fun itemSold(event: ItemSoldEvent) {
+        items[event.itemId]!!.amount -= event.amount
     }
 
     @StateTransitionFunc
     fun itemSoldOut(event: ItemSoldOutEvent) {
-    }
-
-    @StateTransitionFunc
-    fun itemRefiled(event: ItemRefiledEvent) {
+        items[event.itemId]!!.amount = 0
     }
 }
 

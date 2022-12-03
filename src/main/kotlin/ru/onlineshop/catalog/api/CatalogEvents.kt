@@ -8,9 +8,9 @@ const val CATALOG_CREATED = "CATALOG_CREATED_EVENT"
 const val ITEM_ADDED_TO_THE_CATALOG = "ITEM_ADDED_TO_THE_CATALOG_EVENT"
 const val ITEM_REMOVED_FROM_THE_CATALOG = "ITEM_REMOVED_FROM_THE_CATALOG_EVENT"
 const val ITEM_PRICE_CHANGED = "ITEM_PRICE_CHANGED_EVENT"
-const val ITEM_AMOUNT_CHANGED = "ITEM_AMOUNT_CHANGED"
 const val ITEM_SOLD_OUT = "ITEM_SOLD_OUT_EVENT"
 const val ITEM_REFILED = "ITEM_REFILED_EVENT"
+const val ITEM_SOLD = "ITEM_SOLD_EVENT"
 
 @DomainEvent(name = ITEM_ADDED_TO_THE_CATALOG)
 data class ItemAddedEvent(
@@ -45,21 +45,6 @@ data class ItemPriceChangedEvent(
     name = ITEM_PRICE_CHANGED,
 )
 
-@DomainEvent(ITEM_AMOUNT_CHANGED)
-data class ItemAmountChangedEvent(
-    val itemId: UUID,
-    val amountChangeTo: Int,
-) : Event<CatalogAggregate>(
-    name = ITEM_AMOUNT_CHANGED,
-)
-
-@DomainEvent(ITEM_SOLD_OUT)
-data class ItemSoldOutEvent(
-    val itemId: UUID
-) : Event<CatalogAggregate>(
-    name = ITEM_SOLD_OUT,
-)
-
 @DomainEvent(ITEM_REFILED)
 data class ItemRefiledEvent(
     val itemId: UUID,
@@ -67,3 +52,21 @@ data class ItemRefiledEvent(
 ) : Event<CatalogAggregate>(
     name = ITEM_REFILED,
 )
+
+@DomainEvent(ITEM_SOLD)
+data class ItemSoldEvent(
+    val itemId: UUID,
+    val amount: Int
+) : Event<CatalogAggregate>(
+    name = ITEM_SOLD,
+)
+
+@DomainEvent(ITEM_SOLD_OUT)
+data class ItemSoldOutEvent(
+    val itemId: UUID,
+    val amount: Int
+) : Event<CatalogAggregate>(
+    name = ITEM_SOLD_OUT,
+)
+
+
