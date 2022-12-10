@@ -29,7 +29,7 @@ class CatalogAggregateState : AggregateState<String, CatalogAggregate> {
             throw IllegalArgumentException("Item with id $itemId is already exists")
         }
 
-        return ItemAddedEvent(itemId, title, description, amount, price)
+        return ItemAddedEvent(itemId, title, description, price, amount)
     }
 
     fun deleteItemFromCatalog(itemId: UUID): ItemRemovedEvent {

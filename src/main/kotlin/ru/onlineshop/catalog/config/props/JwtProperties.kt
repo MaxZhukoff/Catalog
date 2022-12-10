@@ -1,13 +1,13 @@
 package ru.onlineshop.catalog.config.props
 
-import lombok.Data
-import org.springframework.beans.factory.annotation.Value
+import org.jetbrains.annotations.NotNull
+import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.stereotype.Component
 
 @Component
-@Data
+@ConfigurationProperties("jwt")
 class JwtProperties {
 
-    @Value("\${jwt.secret}")
+    @NotNull
     lateinit var secret: String
 }
